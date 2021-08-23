@@ -1,0 +1,1 @@
+Varlist_fideli_2017 constructed from official list of variable available on CASD.eu : https://www.casd.eu/generate-csv/?language=fr&id_src=295
