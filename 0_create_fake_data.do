@@ -3,11 +3,13 @@ global path "W:\Documents\Github\simul-ppa"
 
 
 ** Individual table
-
+	
+	* Load the variable list of the individual FIDELI data table
 	import excel using "${path}\assets\varlist_fideli_2017.xlsx", firstrow sheet("fideli_individu17_diff_1") clear
 	keep name label modalites
 	save "${path}\assets\varlist_fideli_individu17_diff_1", replace
-
+	
+	* Create a new variable with each variable name
 	local nb_var = _N
 	forval i = 1/`nb_var'{
 		local name = name[`i']
@@ -21,17 +23,19 @@ global path "W:\Documents\Github\simul-ppa"
 		}
 	}
 	drop name label modalites
-
+	
+	* Create the individual ID variable
 	gen id_ind = _n
+	
+	* Allocate individual to households
 	local nb_men = int(_N / 3)
-
 	gen id_log = runiformint(1,`nb_men')
+	
 	order id_ind id*
 	sort id_log id_ind
 	save "${path}\data\fideli_individu17_diff_1", replace
 
-
-***
+*** Buildings ("local") table
 
 import excel using "${path}\assets\varlist_fideli_2017.xlsx", firstrow sheet("fideli_local17_diff_1") clear
 keep name label modalites
@@ -57,7 +61,7 @@ merge
 order id*
 save "${path}\data\fideli_local17_diff_1", replace
 
-***
+*** Income table
 
 import excel using "${path}\assets\varlist_fideli_2017.xlsx", firstrow sheet("fideli_revenus_filosofi17") clear
 keep name label modalites
