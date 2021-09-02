@@ -1,5 +1,5 @@
 
-global path "C:\Users\clair\Documents\Github\simul-ppa"
+global path "W:\Documents\Github\simul-ppa"
 
 
 ** Individual table
