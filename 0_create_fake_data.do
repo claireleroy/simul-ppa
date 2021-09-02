@@ -59,31 +59,35 @@ global path "W:\Documents\Github\simul-ppa"
 	
 	save "${path}\data\fideli_individu17_diff_1", replace
 
+
 *** Buildings ("local") table
 
-import excel using "${path}\assets\varlist_fideli_2017.xlsx", firstrow sheet("fideli_local17_diff_1") clear
-keep name label modalites
-save "${path}\assets\varlist_fideli_local17_diff_1", replace
-
-local nb_var = _N
-forval i = 1/`nb_var'{
-	local name = name[`i']
-	gen `name' = runiform() *1000
-	if substr("`name'", 1, 2) == "id"{
-		tostring(`name'), replace force
-		replace `name' = subinstr(`name', ".", "", 1)
+	* Load the variable list of the buildings FIDELI data table
+	import excel using "${path}\assets\varlist_fideli_2017.xlsx", firstrow sheet("fideli_local17_diff_1") clear
+	keep name label modalites
+	save "${path}\assets\varlist_fideli_local17_diff_1", replace
+	
+	* Create a new variable with each variable name
+	local nb_var = _N
+	forval i = 1/`nb_var'{
+		local name = name[`i']
+		gen `name' = runiform() *1000
+		if substr("`name'", 1, 2) == "id"{
+			tostring(`name'), replace force
+			replace `name' = subinstr(`name', ".", "", 1)
+		}
+		if modalites[`i'] != "" {
+			tostring(`name'), replace force
+			replace `name' = subinstr(`name', ".", "", 1)
+		}
 	}
-	if modalites[`i'] != "" {
-		tostring(`name'), replace force
-		replace `name' = subinstr(`name', ".", "", 1)
-	}
-}
-drop name label modalites
-drop if _n >= 1
+	drop name label modalites
+	drop if _n >= 1
 
-merge 
-order id*
-save "${path}\data\fideli_local17_diff_1", replace
+	merge 
+	order id*
+	save "${path}\data\fideli_local17_diff_1", replace
+
 
 *** Income table
 
